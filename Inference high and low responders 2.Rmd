@@ -1,0 +1,20 @@
+---
+title: "Inference high and low responders 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, echo=FALSE}
+
+# In this report I am going to select one variable from the data set from Haun et al. 2019, and estimate the difference between HIGH and LOW responders (the CLUSTER variable). Based on the estimate and its uncertanty I am going to 
+
+# Load needed packages
+library(tidyverse)
+library(readr)
+
+
+
+```

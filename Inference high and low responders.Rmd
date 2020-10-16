@@ -1,0 +1,129 @@
+---
+title: "Inference high and low responders"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Inference high and low responders}
+
+# Load needed packages
+library(tidyverse)
+library(readr)
+
+# Download and save the file
+download.file(url = "https://ndownloader.figstatic.com/files/14702420", destfile = "./data/hypertrophy.csv")
+
+# Attaching file to "hypertrophy"
+hypertrophy <- read_csv("./data/hypertrophy.csv")
+
+# View dataset
+view(hypertrophy)
+
+# Creating a hypothesis
+## There is a statistical difference between high and low responders in 3RM squat
+
+# Descriptive statistics: of the variable of interest (possibly including a figure)
+## My variable of interest is 3 RM squat
+
+### Choosing variables of interest (group and Squat_3RM_kg)
+interest <- c("SUB_ID", "CLUSTER", "Squat_3RM_kg")
+
+### Calculate summary statistics
+hyp <- hypertrophy %>%
+  
+  select(all_of(interest)) %>%
+  
+  group_by(CLUSTER, Squat_3RM_kg) %>% 
+  
+  filter(!is.na(CLUSTER)) %>%          # Now the dataset only includes the two groups
+  
+  pivot_longer(names_to = "variable", 
+               values_to = "values",
+               cols = Squat_3RM_kg) %>%
+
+  summarise(m = mean(values), 
+            s = sd(values)) %>%
+  
+  print()   # Checking the tibble
+
+view(hyp)   # Checking the table
+
+### Making a boxplot ????????????
+df <- data.frame(hyp = hyp) # Making a data frame
+
+view(df)  # Checking the data frame
+
+df %>%
+  # Plots our samples on the y axis, and sets all x to 1.
+  ggplot(aes(x = 1, hyp)) + 
+  # Adds the boxplot
+  geom_boxplot(width = 0.5) +
+  # Scales the x axis to better plot the data
+  scale_x_continuous(limits = c(0,2)) +
+  # Set the name of the y axis
+  labs(y = "Squat 3RM") +
+  # The code below modifies the theme of the plot, removing 
+  # the x axis
+  theme(axis.title.x = element_blank(), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(), 
+        axis.line.x = element_blank()) 
+
+
+
+# Inferential statistics: estimation of the effect and test of the hypothesis 
+# Draw inference regarding the effect (is this effect true?)
+
+hyp3 <- hypertrophy %>%
+  select(SUB_ID, CLUSTER, T3T1__RNA) %>%
+  filter(!is.na(CLUSTER)) %>%
+  print()
+
+t.test(T3T1__RNA  ~ CLUSTER, data = hyp3)
+
+hyp3 %>%
+  ggplot(aes(CLUSTER, T3T1__RNA)) + geom_boxplot()
+
+
+
+
+```
+
+interest <- c("CLUSTER", "Squat_3RM_kg")
+
+hypertrophy %>%
+  
+  select(all_of(interest)) %>%
+  
+  group_by(CLUSTER, Squat_3RM_kg) %>% 
+  
+  filter(!is.na(CLUSTER)) %>% print()
+
+
+
+
+ 
+  summarise(m = mean(!is.na(CLUSTER)), 
+            s = sd(!is.na(CLUSTER))) %>%
+  
+  print()
+  
+  
+  hypertrophy %>%
+  dplyr::select(CLUSTER, Squat_3RM_kg) %>%
+  
+  pivot_longer(cols = CLUSTER, Squat_3RM_kg, 
+               names_to = "variable", 
+               values_to = "values") %>%
+  
+  filter(!is.na(CLUSTER)) %>%
+  
+  group_by(CLUSTER, variable) %>%
+  
+  summarise(m = mean(values), 
+            s = sd(values))
