@@ -5,11 +5,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Se på filen "Inference high and low responders 2"
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r Inference high and low responders}
+
+# Bruk cellekjerner total RNA eller lignende
 
 # Load needed packages
 library(tidyverse)
@@ -18,7 +23,7 @@ library(readr)
 # Download and save the file
 download.file(url = "https://ndownloader.figstatic.com/files/14702420", destfile = "./data/hypertrophy.csv")
 
-# Attaching file to "hypertrophy"
+# Reading and attaching file to "hypertrophy"
 hypertrophy <- read_csv("./data/hypertrophy.csv")
 
 # View dataset
@@ -50,6 +55,9 @@ hyp <- hypertrophy %>%
             s = sd(values)) %>%
   
   print()   # Checking the tibble
+
+# To see decimal numbers
+data.frame(hyp)
 
 view(hyp)   # Checking the table
 
@@ -89,8 +97,95 @@ t.test(T3T1__RNA  ~ CLUSTER, data = hyp3)
 hyp3 %>%
   ggplot(aes(CLUSTER, T3T1__RNA)) + geom_boxplot()
 
+## Tips til github
+# If it doesn´t work with pushing the bottons, use te therminal instead. Type this in the terminal and push enter
+
+# git status
+# git pull
 
 
+
+
+
+######## Creating a table of descriptive statistics ########
+hypertrophy %>%
+  
+  # Selecting the variables of interest
+  dplyr::select(SUB_ID, GROUP, CLUSTER, AGE, T1_BODY_MASS, 
+                T1_TESTOSTERONE_ngdl, T3_TESTOSTERONE_ngdl, 
+                T3T1__TESTOSTERONE_ngdl) %>% 
+  
+  pivot_longer(cols = AGE:T3T1__TESTOSTERONE_ngdl, 
+               names_to = "Variable", 
+               values_to = "values") %>% 
+  
+  # Removing NA from the data
+  filter(!is.na(CLUSTER)) %>% 
+  
+  group_by(CLUSTER, values) %>% 
+  
+  # Calculating the mean and SD
+  summarise(m = mean(values), 
+            s = sd(values)) %>% 
+  
+  # Changing the names on columns and rows
+  mutate(ms = paste(round(m,1), 
+                    " (", 
+                    round(s,1), 
+                    ")"), 
+        
+        CLUSTER = factor(CLUSTER, 
+                        levels = c("LOW", "HIGH"), 
+                        labels = c("LOW (n = 10)", 
+                                   "HIGH (n = 10)")),
+
+         Variable = factor(Variable, 
+                           levels = c("AGE", 
+                                      "T1_BODY_MASS", 
+                                      "T1_TESTOSTERONE_ngdl", 
+                                      "T3_TESTOSTERONE_ngdl",
+                                      "T3T1__TESTOSTERONE_ngdl"), 
+                           labels = c("Age (years)", 
+                                      "Body mass (kg)", 
+                                      "Tetosterone T1 (ng/dl)", 
+                                      "Tetosterone T3 (ng/dl)",
+                                      "Change in tetosterone (ng/dl)"))) %>% 
+  
+  # Selecting the names and values of interest
+  select(CLUSTER, Variable, ms) %>% 
+  
+  pivot_wider(names_from = CLUSTER, values_from = ms) %>%
+  
+  # Arrange the variables in the right order
+  arrange(Variable) %>%
+  
+  # Making the format html and adding a caption
+  kable(format = "html",
+        caption = "Table 1 Descriptive statistics") %>% 
+  
+  # Adding a footnote
+  footnote(general = "Values are Mean (SD)") %>%
+  
+  # Changing the table style and font
+  kable_classic(full_width = F, html_font = "Times New Roman") %>%
+  
+  
+  print()
+
+# Hvordan få dette riktig? Trenger jeg det egentlig??
+
+
+######################
+#------------------------------------------ Erase, not part of the task
+# Selecting the variables of interest 
+hyp1 <- hypertrophy %>% # Attaching to "hyp1"
+  select(SUB_ID, CLUSTER, T3_TESTOSTERONE_ngdl, T1_TESTOSTERONE_ngdl) %>% # Selecting variables of interest
+  filter(!is.na(CLUSTER)) %>% # Removing participants that don´t belong to any group
+  print()
+
+# Using a paired, one sample t-test to see if there is an increase in tetosterone levels in HIGH and in LOW (using hyp1)
+t.test(hyp1$T3_TESTOSTERONE_ngdl, hyp1$T1_TESTOSTERONE_ngdl, paired = TRUE, alternative = "two.sided")
+#------------------------------------------
 
 ```
 

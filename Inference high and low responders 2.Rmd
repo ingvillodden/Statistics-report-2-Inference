@@ -1,20 +1,131 @@
 ---
 title: "Inference high and low responders 2"
 output: html_document
+editor_options:
+  chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Inference between high and low responders in testosterone levels
 
-```{r setup, echo=FALSE}
+## Introduction
+Haun et al. (2019) conducted their study on 30 trained men who performed a 6 weeks resistance training intervention. Two groups were formed based on training outcome measures, where the top and bottom third of the data set were assigned to a high- (*n* = 10) and low-responder group (*n* = 10), respectively. The goal of the study was to examine if HIGH responders would experience greater increases in myonuclear accretion as well as biomarkers related to ribosome biogenesis, androgen signaling, mTORc1 signaling, and mitochondrial biogenesis relative to LOW responders. 
 
-# In this report I am going to select one variable from the data set from Haun et al. 2019, and estimate the difference between HIGH and LOW responders (the CLUSTER variable). Based on the estimate and its uncertanty I am going to 
 
-# Load needed packages
+**Om testosteron!!!**
+The goal of this report is to estimate the difference in change in testosterone levels (ng/dl) between the HIGH and LOW responders from pre (T1) to post test (T3), and based on this estimate and its uncertainty, draw inference regarding the effect.
+
+
+#### Null hypothesis
+> There is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW
+
+
+#### Alternative hypothesis
+> There is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW
+
+
+## Methods
+The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used a an independent two sample t-test to compare the mean changes from T1 to T3 between HIGH and LOW. The significance level was set to *p* < 0.050, while tendency was set to *p* ≤ 0,100.
+
+
+## Results
+Testosterone levels increased with 6,92 mg/dl from T1 to T3 in HIGH, and decreased with 19,83 ng/dl from T1 to T3 in LOW (95% CI:[-50.3, 103.8], t(16) = 0.737, p = 0.47).
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+######## Background and Purpose: #########
+# In this report I am going to select one variable, "T3T1__TESTOSTERONE_ngdl", from the data set from Haun et al. 2019, and estimate the difference between HIGH and LOW responders (the CLUSTER variable). Based on the estimate and its uncertanty I am going to draw inference regarding the effect (is this effect true?).
+
+######## The report is going to contain: ########
+# A clearly stated hypothesis
+# Descriptive statistics of the variable of interest (including a boxplot)
+# Estimation of the effect and test of an hypothesis
+
+
+######## Hypothesis ########
+# There is a significant larger increase in testosterone from T1 to T2 in HIGH than in LOW.
+
+
+######## Downloading packages and the file ########
+# Loading needed packages
 library(tidyverse)
 library(readr)
+library(rstatix)
+
+# Downloading and saving the file
+download.file(url = "https://ndownloader.figstatic.com/files/14702420", destfile = "./data/hypertrophy.csv")
+
+# Reading and attaching file to "hypertrophy"
+hypertrophy <- read_csv("./data/hypertrophy.csv")
 
 
+######## Boxplot ########
+
+# Selecting the variables of interest (using the change score (T3T1))
+hyp <- hypertrophy %>% # Attaching to "hyp"
+  select(SUB_ID, CLUSTER, T3T1__TESTOSTERONE_ngdl) %>% # Selecting variables of interest
+  filter(!is.na(CLUSTER),
+         !is.na(T3T1__TESTOSTERONE_ngdl)) # Removing participants that don´t belong to any group
+  
+
+
+# Making a boxplot of values comparing the two groups
+hyp %>%
+  ggplot(aes(CLUSTER, T3T1__TESTOSTERONE_ngdl)) + # x=CLUSTER, y=testosterone level
+    geom_boxplot(width = 0.5) + # Making a boxplot
+    labs(x = "RESPONDERS", 
+         y = "CHANGE IN TESTOSTERONE (ng/dl)",
+        subtitle = "Figure 1: Change in testosterone levels from T1 to T3 in HIGH and LOW") + # Changing labels
+    theme_classic() # Changing theme
+    
+    
+
+######## Inference statistics ########
+## Test statistic: mean difference, confidence interval and p-values
+
+# Using an independent/unpaired, two sample t-test to compare means from two groups (using hyp)
+ttest <- t.test(T3T1__TESTOSTERONE_ngdl ~ CLUSTER, data = hyp) # Want to explain testosterone based on group HIGH and LOW (CLUSTER)
+
+
+
+# The code above provides the same information as all the code below do, so the following code is not really necessary
+
+# The test statistic
+t <- ttest$statistic # t = 0.7370472
+
+# Mean difference 
+estimate1 <- ttest$estimate[1]  # Mean HIGH = 6.92000
+estimate2 <- ttest$estimate[2]  # Mean LOW = -19.83333
+
+# Confidence interval
+ci1 <- ttest$conf.int[1]  # Lower CI = -50.25373
+ci2 <- ttest$conf.int[2]  # Higher CI = 103.7604, conf level = 0,95
+
+# The p-value
+p <- ttest$p.value # p = 0.4718631
+
+# Degres of freedom
+df <- ttest$parameter  # df = 15.85116 
+
+
+######## Conclutions from the results ########
+# HIGH had a 6,92 ng/dl mean increase in testosterone from T1 to T3
+# LOW had a 19,83 ng/dl mean decrease in testosterone from T1 to T3
+# When comparing the mean changes between the two groups, I found that p = 0.47. 
+# Thus, the hypothesis "there is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T2 in HIGH compared to LOW," has been rejected.
 
 ```
+
+
+## Discussion
+Even though there was a difference in change in testosterone levels between the two groups from T1 to T3, the increase was not significantly greater in HIGH compared to LOW (*p* = 0.47).
+
+Thus, the alternative hypothesis "there is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW," is rejected.
+
+Since the CI contains 0, we can not reject the null hypothesis that states that "there is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW."
+
+The findings from Haun et al. (2019) suggests that high responders do not have a greater increase in testosterone levels after a 6 weeks resistance training intervention compared to low responders.
+
+
+## References
+Haun, Cody T., Christopher G. Vann, C. Brooks Mobley, Shelby C. Osburn, Petey W. Mumford, Paul A. Roberson, Matthew A. Romero, et al. 2019. “Pre-Training Skeletal Muscle Fiber Size and Predominant Fiber Type Best Predict Hypertrophic Responses to 6 Weeks of Resistance Training in Previously Trained Young Men.” Journal Article. Frontiers in Physiology 10 (297). https://doi.org/10.3389/fphys.2019.00297.
