@@ -10,9 +10,7 @@ editor_options:
 ## Introduction
 Haun et al. (2019) conducted their study on 30 trained men who performed a 6 weeks resistance training intervention. Two groups were formed based on training outcome measures, where the top and bottom third of the data set were assigned to a high- (*n* = 10) and low-responder group (*n* = 10), respectively. The goal of the study was to examine if HIGH responders would experience greater increases in myonuclear accretion as well as biomarkers related to ribosome biogenesis, androgen signaling, mTORc1 signaling, and mitochondrial biogenesis relative to LOW responders. 
 
-
-**Om testosteron!!!**
-The goal of this report is to estimate the difference in change in testosterone levels (ng/dl) between the HIGH and LOW responders from pre (T1) to post test (T3), and based on this estimate and its uncertainty, draw inference regarding the effect.
+Testosterone is known to induce skeletal muscle hypertrophy (Herbst & Shalender, 2004). The goal of this report is to estimate the difference in change in testosterone levels (ng/dl) between the HIGH and LOW responders from pre (T1) to post test (T3), and based on this estimate and its uncertainty, draw inference regarding the effect.
 
 
 #### Null hypothesis
@@ -131,3 +129,4 @@ The findings from Haun et al. (2019) suggests that high responders do not have a
 
 ## References
 Haun, Cody T., Christopher G. Vann, C. Brooks Mobley, Shelby C. Osburn, Petey W. Mumford, Paul A. Roberson, Matthew A. Romero, et al. 2019. “Pre-Training Skeletal Muscle Fiber Size and Predominant Fiber Type Best Predict Hypertrophic Responses to 6 Weeks of Resistance Training in Previously Trained Young Men.” Journal Article. Frontiers in Physiology 10 (297). https://doi.org/10.3389/fphys.2019.00297.
+Herbst, Karen L; Bhasin, Shalender Testosterone action on skeletal muscle, Current Opinion in Clinical Nutrition and Metabolic Care: May 2004 - Volume 7 - Issue 3 - p 271-277
