@@ -64,6 +64,8 @@ hypertrophy <- read_csv("./data/hypertrophy.csv")
 # Selecting the variables of interest (using the change score (T3T1))
 hyp <- hypertrophy %>% # Attaching to "hyp"
   select(SUB_ID, CLUSTER, T3T1__TESTOSTERONE_ngdl) %>% # Selecting variables of interest
+  mutate(CLUSTER = factor(CLUSTER, levels = c("LOW", "HIGH"))) %>% 
+  
   filter(!is.na(CLUSTER),
          !is.na(T3T1__TESTOSTERONE_ngdl)) # Removing participants that don´t belong to any group
   
