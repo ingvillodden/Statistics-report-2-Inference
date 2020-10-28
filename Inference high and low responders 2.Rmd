@@ -8,25 +8,28 @@ editor_options:
 # Inference between high and low responders in testosterone levels
 
 ## Introduction
-Haun et al. (2019) conducted their study on 30 trained men who performed a 6 weeks resistance training intervention. Two groups were formed based on training outcome measures, where the top and bottom third of the data set were assigned to a high- (*n* = 10) and low-responder group (*n* = 10), respectively. The goal of the study was to examine if HIGH responders would experience greater increases in myonuclear accretion as well as biomarkers related to ribosome biogenesis, androgen signaling, mTORc1 signaling, and mitochondrial biogenesis relative to LOW responders. 
+<!-- Added references in the text with [@Haun2019], using the minus sign means that names are removed from the reference, only year will appear. The reference is automatically formatted in the end of the report. So removed the ref manually insterted. -->
+Haun et al. [-@Haun2019] conducted their study on 30 trained men who performed a 6 weeks resistance training intervention. Two groups were formed based on training outcome measures, where the top and bottom third of the data set were assigned to a high- (*n* = 10) and low-responder group (*n* = 10), respectively. The goal of the study was to examine if HIGH responders would experience greater increases in myonuclear accretion as well as biomarkers related to ribosome biogenesis, androgen signaling, mTORc1 signaling, and mitochondrial biogenesis relative to LOW responders. 
+<!-- Very good introduction -->
+Testosterone is known to induce skeletal muscle hypertrophy [@Herbst2004]. The goal of this report is to estimate the difference in change in testosterone levels (ng/dl) between the HIGH and LOW responders from pre (T1) to post training (T3), and based on this estimate and its uncertainty, draw inference regarding the effect.
+<!-- Very good and explicit! -->
 
-Testosterone is known to induce skeletal muscle hypertrophy (Herbst & Shalender, 2004). The goal of this report is to estimate the difference in change in testosterone levels (ng/dl) between the HIGH and LOW responders from pre (T1) to post test (T3), and based on this estimate and its uncertainty, draw inference regarding the effect.
-
-
+<!-- I moved the p value threshold to the null since this is what you are testing against... -->
 #### Null hypothesis
-> There is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW
+> There is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW  (*p* > 0.05)
 
 
 #### Alternative hypothesis
-> There is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW
+> There is a significant greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW
 
 
 ## Methods
-The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used a an independent two sample t-test to compare the mean changes from T1 to T3 between HIGH and LOW. The significance level was set to *p* < 0.050, while tendency was set to *p* ≤ 0,100.
+The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used an independent two sample t-test to compare the mean changes from T1 to T3 between HIGH and LOW. The significance level was set to *p* < 0.05, while tendency was set to *p* ≤ 0.100. 
+<!-- In a null hypothesis testing framework, a tendency is not really something you want to deal with. Think about what it means, "I have no evidence against the null, but a tendency"?  -->
 
 
 ## Results
-
+<!-- Very good comments in the code! -->
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -121,18 +124,18 @@ df <- ttest$parameter  # df = 15.85116
 
 ```
 
-Testosterone levels increased with `r round(estimate2, 1)` mg/dl from T1 to T3 in HIGH, and decreased with `r round(estimate1, 1)` mg/dl from T1 to T3 in LOW. The mean change between the groups was `r round(mdiff, 1)` mg/dl (95% CI: [`r round(ci1, 1)`, `r round(ci2, 1)`], *t*(`r round(df, 1)`) = `r round(t,2)`, *p* = `r round(p, 3)`).
+Testosterone levels increased with `r round(estimate2, 1)` mg/dl from T1 to T3 in HIGH, and decreased with `r round(estimate1, 1)` mg/dl from T1 to T3 in LOW. The mean difference between the groups was `r round(mdiff, 1)` mg/dl (95% CI: [`r round(ci1, 1)`, `r round(ci2, 1)`], *t*(`r round(df, 1)`) = `r round(t,2)`, *p* = `r round(p, 3)`).
 
 ## Discussion
 Even though there was a difference in change in testosterone levels between the two groups from T1 to T3, the increase was not significantly greater in HIGH compared to LOW (*p* = `r round(p, 3)`).
 
-Thus, the alternative hypothesis "there is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW," is rejected.
+Thus, the alternative hypothesis "there is a significant (*p* = 0.05) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW," is rejected. <!-- Remember that it is the null that we are testing -->
 
 Since the CI contains 0, we can not reject the null hypothesis that states that "there is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW."
 
-The findings from Haun et al. (2019) suggests that high responders do not have a greater increase in testosterone levels after a 6 weeks resistance training intervention compared to low responders.
+The findings from Haun et al. [-@Haun2019] suggests that high responders do not have a greater increase in testosterone levels after a 6 weeks resistance training intervention compared to low responders.
 
 
 ## References
-Haun, Cody T., Christopher G. Vann, C. Brooks Mobley, Shelby C. Osburn, Petey W. Mumford, Paul A. Roberson, Matthew A. Romero, et al. 2019. “Pre-Training Skeletal Muscle Fiber Size and Predominant Fiber Type Best Predict Hypertrophic Responses to 6 Weeks of Resistance Training in Previously Trained Young Men.” Journal Article. Frontiers in Physiology 10 (297). https://doi.org/10.3389/fphys.2019.00297.
-Herbst, Karen L; Bhasin, Shalender Testosterone action on skeletal muscle, Current Opinion in Clinical Nutrition and Metabolic Care: May 2004 - Volume 7 - Issue 3 - p 271-277
+
+
