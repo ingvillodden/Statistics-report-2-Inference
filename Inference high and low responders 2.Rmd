@@ -3,6 +3,7 @@ title: "Inference high and low responders 2"
 output: html_document
 editor_options:
   chunk_output_type: console
+bibliography: references.bib
 ---
 
 # Inference between high and low responders in testosterone levels
@@ -24,7 +25,7 @@ Testosterone is known to induce skeletal muscle hypertrophy [@Herbst2004]. The g
 
 
 ## Methods
-The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used an independent two sample t-test to compare the mean changes from T1 to T3 between HIGH and LOW. The significance level was set to *p* < 0.05, while tendency was set to *p* ≤ 0.100. 
+The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used an independent two sample t-test to compare the mean changes from T1 to T3 between HIGH and LOW. The significance level was set to *p* < 0.05. <!--  while tendency was set to *p* ≤ 0.100. -->
 <!-- In a null hypothesis testing framework, a tendency is not really something you want to deal with. Think about what it means, "I have no evidence against the null, but a tendency"?  -->
 
 
@@ -51,6 +52,7 @@ The mean changes from T1 to T3 in HIGH and LOW were plotted as a boxplot. I used
 library(tidyverse)
 library(readr)
 library(rstatix)
+library(bibtex)
 
 # Downloading and saving the file
 download.file(url = "https://ndownloader.figstatic.com/files/14702420", destfile = "./data/hypertrophy.csv")
@@ -119,9 +121,6 @@ df <- ttest$parameter  # df = 15.85116
 # Thus, the hypothesis "there is a significant (*p* = 0.050) greater increase in testosterone levels from T1 to T2 in HIGH compared to LOW," has been rejected.
 
 
-
-# To write 
-
 ```
 
 Testosterone levels increased with `r round(estimate2, 1)` mg/dl from T1 to T3 in HIGH, and decreased with `r round(estimate1, 1)` mg/dl from T1 to T3 in LOW. The mean difference between the groups was `r round(mdiff, 1)` mg/dl (95% CI: [`r round(ci1, 1)`, `r round(ci2, 1)`], *t*(`r round(df, 1)`) = `r round(t,2)`, *p* = `r round(p, 3)`).
@@ -129,7 +128,8 @@ Testosterone levels increased with `r round(estimate2, 1)` mg/dl from T1 to T3 i
 ## Discussion
 Even though there was a difference in change in testosterone levels between the two groups from T1 to T3, the increase was not significantly greater in HIGH compared to LOW (*p* = `r round(p, 3)`).
 
-Thus, the alternative hypothesis "there is a significant (*p* = 0.05) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW," is rejected. <!-- Remember that it is the null that we are testing -->
+<!-- Thus, the alternative hypothesis "there is a significant (*p* = 0.05) greater increase in testosterone levels from T1 to T3 in HIGH compared to LOW," is rejected. --> 
+<!-- Remember that it is the null that we are testing -->
 
 Since the CI contains 0, we can not reject the null hypothesis that states that "there is no difference in change in testosterone levels from T1 to T3 in HIGH compared to LOW."
 
